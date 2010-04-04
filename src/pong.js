@@ -50,6 +50,7 @@ function main() {
                             var sign = yDist >= 0 ? 1 : -1;
                             ball.vy = sign * Math.abs(ball.vy);
                         }
+                        ball.vy += 0.1 * this.v;
                         return true;
                     }
                 }
@@ -79,8 +80,10 @@ function main() {
                 // dont cross borders
                 if (this.y < this.yMin) {
                     this.y = this.yMin;
+                    this.v = 0;
                 } else if (this.y > this.yMax) {
                     this.y = this.yMax;
+                    this.v = 0;
                 }
             };
 
