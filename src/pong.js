@@ -25,8 +25,35 @@ function main() {
                 this[k] = kwargs[k];
             }
             this.yMax -= this.height;
+            this.halfWidth = this.width / 2;
+            this.halfHeight = this.height / 2;
 
             this.hitBall = function(ball) {
+                // treat ball like square inscribed in circle of ball.r radius
+
+                // compute center distances
+                var xDist = ball.x - (this.x + this.halfWidth);
+                var xDistAbs = Math.abs(xDist);
+                var yDist = ball.y - (this.y + this.halfHeight);
+                var yDistAbs = Math.abs(yDist);
+
+                // check for collisions
+                if (xDistAbs <= this.halfWidth + ball.halfSide) {
+                    if (yDistAbs <= this.halfHeight + ball.halfSide) {
+                        if (yDistAbs < this.halfHeight) {
+                            // bounce from left/right
+                            var sign = xDist >= 0 ? 1 : -1;
+                            ball.vx = sign * Math.abs(ball.vx);
+                        } else {
+                            // bounce from top/bottom
+                            var sign = yDist >= 0 ? 1 : -1;
+                            ball.vy = sign * Math.abs(ball.vy);
+                        }
+                        return true;
+                    }
+                }
+
+                // no collision
                 return false;
             };
 
@@ -59,6 +86,7 @@ function main() {
             }
             this.yMin += this.r;
             this.yMax -= this.r;
+            this.halfSide = this.r / Math.sqrt(2);  // for racket collision
 
             this.move = function() {
                 this.x += this.vx;
@@ -105,20 +133,33 @@ function main() {
         var yMax = HEIGHT - yMin;
 
         // create left racket
-        var leftRacket = new Racket({
+        var rackets = []
+        rackets.push(new Racket({
             x: 2,
             y: (HEIGHT - racketHeight) / 2,
             width: racketWidth,
-            height: racketHeight,
+            height: racketHeight * 4.8,
             yMin: yMin,
             yMax: yMax,
             up: key(87),  // w
             down: key(83)  // s
-        });
+        }));
 
         // create right racket
-        var rightRacket = new Racket({
+        rackets.push(new Racket({
             x: WIDTH - racketWidth - 2,
+            y: (HEIGHT - racketHeight) / 2,
+            width: racketWidth,
+            height: racketHeight * 4.8,
+            yMin: yMin,
+            yMax: yMax,
+            up: key(38),  // up arrow
+            down: key(40)  // down arrow
+        }));
+
+        // create middle racket
+        rackets.push(new Racket({
+            x: WIDTH / 2,
             y: (HEIGHT - racketHeight) / 2,
             width: racketWidth,
             height: racketHeight,
@@ -126,19 +167,42 @@ function main() {
             yMax: yMax,
             up: key(38),  // up arrow
             down: key(40)  // down arrow
-        });
+        }));
 
-        // create ball
-        var ball = new Ball({
+        // create balls
+        var balls = [];
+        balls.push(new Ball({
             x: WIDTH / 2,
             y: HEIGHT / 2,
             r: 15,
-            vx: -1,
+            vx: 5,
             vy: 3,
             yMin: yMin,
             yMax: yMax,
-            rackets: [leftRacket, rightRacket]
-        });
+            rackets: rackets
+        }));
+
+        balls.push(new Ball({
+            x: WIDTH / 2,
+            y: HEIGHT / 2,
+            r: 10,
+            vx: 7,
+            vy: 3,
+            yMin: yMin,
+            yMax: yMax,
+            rackets: rackets
+        }));
+
+        balls.push(new Ball({
+            x: WIDTH / 2,
+            y: HEIGHT / 2,
+            r: 5,
+            vx: 5,
+            vy: -3,
+            yMin: yMin,
+            yMax: yMax,
+            rackets: rackets
+        }));
 
         // draw rackets
         setInterval(function() {
@@ -147,11 +211,14 @@ function main() {
                         WIDTH, HEIGHT - 2 * borderThickness);
 
             // draw rackets
-            leftRacket.draw();
-            rightRacket.draw();
+            for (var i = 0; i < rackets.length; i++) {
+                rackets[i].draw();
+            }
 
-            // draw ball
-            ball.draw();
+            // draw balls
+            for (var i = 0; i < balls.length; i++) {
+                balls[i].draw();
+            }
         }, 1000 / FPS);
     }
 }
