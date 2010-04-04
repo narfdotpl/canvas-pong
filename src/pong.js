@@ -26,6 +26,10 @@ function main() {
             }
             this.yMax -= this.height;
 
+            this.hitBall = function(ball) {
+                return false;
+            };
+
             this.move = function() {
                 if (this.up()) {
                     this.y -= 10;
@@ -44,6 +48,44 @@ function main() {
             this.draw = function() {
                 this.move();
                 c.fillRect(this.x, this.y, this.width, this.height);
+            };
+        }
+
+        // Ball
+        function Ball(kwargs) {
+            // kwargs: x, y, r, vx, vy, yMin, yMax, rackets
+            for (var k in kwargs) {
+                this[k] = kwargs[k];
+            }
+            this.yMin += this.r;
+            this.yMax -= this.r;
+
+            this.move = function() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // bounce from borders
+                if (this.y < this.yMin) {
+                    this.y = this.yMin;
+                    this.vy = Math.abs(this.vy);
+                } else if (this.y > this.yMax) {
+                    this.y = this.yMax;
+                    this.vy = - Math.abs(this.vy);
+                } else {
+                    // bounce from rackets
+                    for (var i = 0; i < this.rackets.length; i++) {
+                        if (this.rackets[i].hitBall(this)) {
+                            break;
+                        }
+                    }
+                }
+            };
+
+            this.draw = function() {
+                this.move();
+                c.beginPath();
+                c.arc(this.x, this.y, this.r, 0, 2 * Math.PI, true);
+                c.fill();
             };
         }
 
@@ -86,6 +128,18 @@ function main() {
             down: key(40)  // down arrow
         });
 
+        // create ball
+        var ball = new Ball({
+            x: WIDTH / 2,
+            y: HEIGHT / 2,
+            r: 15,
+            vx: -1,
+            vy: 3,
+            yMin: yMin,
+            yMax: yMax,
+            rackets: [leftRacket, rightRacket]
+        });
+
         // draw rackets
         setInterval(function() {
             // clear everything apart borders
@@ -95,6 +149,9 @@ function main() {
             // draw rackets
             leftRacket.draw();
             rightRacket.draw();
+
+            // draw ball
+            ball.draw();
         }, 1000 / FPS);
     }
 }
