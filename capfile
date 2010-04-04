@@ -1,0 +1,22 @@
+SOURCE_DIR = 'src'
+BUILD_DIR = 'build'
+
+
+desc 'build all'
+task :build do
+  dir
+  html
+end
+
+
+desc 'prepare empty build directory'
+task :dir do
+  system "[ ! -d #{BUILD_DIR} ] && mkdir #{BUILD_DIR}"
+  system "rm -rf #{BUILD_DIR}/*"
+end
+
+
+desc 'render html'
+task :html do
+  system "haml #{SOURCE_DIR}/pong.haml > #{BUILD_DIR}/index.html"
+end
