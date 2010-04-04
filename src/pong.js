@@ -27,6 +27,7 @@ function main() {
             this.yMax -= this.height;
             this.halfWidth = this.width / 2;
             this.halfHeight = this.height / 2;
+            this.v = 0;
 
             this.hitBall = function(ball) {
                 // treat ball like square inscribed in circle of ball.r radius
@@ -58,10 +59,21 @@ function main() {
             };
 
             this.move = function() {
+                this.y += this.v;
+
+                // keyboard
                 if (this.up()) {
-                    this.y -= 10;
+                    if (this.v > 0) {
+                        this.v = 0;
+                    }
+                    this.v -= 2;
                 } else if (this.down()) {
-                    this.y += 10;
+                    if (this.v < 0) {
+                        this.v = 0;
+                    }
+                    this.v += 2;
+                } else {
+                    this.v = 0;
                 }
 
                 // dont cross borders
