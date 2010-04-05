@@ -51,6 +51,7 @@ function main() {
                             ball.vy = sign * Math.abs(ball.vy);
                         }
                         ball.vy += 0.1 * this.v;
+                        ball.vx *= 1.02;
                         return true;
                     }
                 }
