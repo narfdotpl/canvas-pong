@@ -20,7 +20,7 @@ function main() {
 
         // Racket
         function Racket(kwargs) {
-            // kwargs: x, y, width, height, yMin, yMax, up(), down()
+            // x, y, width, height, yMin, yMax, up(), down()
             for (var k in kwargs) {
                 this[k] = kwargs[k];
             }
@@ -98,10 +98,11 @@ function main() {
 
         // Ball
         function Ball(kwargs) {
-            // kwargs: x, y, r, vx, vy, yMin, yMax, rackets
+            // x, y, r, vx, vy, yMin, yMax, maxSpeed, maxStretch, rackets
             for (var k in kwargs) {
                 this[k] = kwargs[k];
             }
+
             this.yMin += this.r;
             this.yMax -= this.r;
             this.halfSide = this.r / Math.sqrt(2);  // for racket collision
@@ -129,9 +130,30 @@ function main() {
 
             this.draw = function() {
                 this.move();
+
+                // ellipse
+                c.save();
+
+                var angle = Math.atan(this.vy / this.vx);
+                var cos = Math.cos(angle);
+                var sin = Math.sin(angle);
+
+                var speedRatio = (this.vx * this.vx + this.vy * this.vy) /
+                                 (this.maxSpeed * this.maxSpeed);
+                var scaleX = 1 + speedRatio * (this.maxStretch - 1);
+                if (scaleX > this.maxStretch) {
+                    scaleX = this.maxStretch;
+                }
+                var scaleY = 1 / scaleX;
+
+                c.transform(scaleX * cos, sin, -sin, scaleY * cos,
+                            this.x, this.y);
+
                 c.beginPath();
-                c.arc(this.x, this.y, this.r, 0, 2 * Math.PI, true);
+                c.arc(0, 0, this.r, 0, 2 * Math.PI, true);
                 c.stroke();
+
+                c.restore();
             };
         }
 
@@ -193,10 +215,12 @@ function main() {
             x: WIDTH / 2,
             y: HEIGHT / 2,
             r: 15,
-            vx: 5,
-            vy: 3,
+            vx: 15,
+            vy: -1,
             yMin: yMin,
             yMax: yMax,
+            maxSpeed: 20,
+            maxStretch: 1.5,
             rackets: rackets
         }));
 
@@ -208,6 +232,8 @@ function main() {
             vy: 3,
             yMin: yMin,
             yMax: yMax,
+            maxSpeed: 20,
+            maxStretch: 1.5,
             rackets: rackets
         }));
 
@@ -219,6 +245,8 @@ function main() {
             vy: -3,
             yMin: yMin,
             yMax: yMax,
+            maxSpeed: 20,
+            maxStretch: 1.5,
             rackets: rackets
         }));
 
