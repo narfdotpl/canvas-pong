@@ -90,7 +90,9 @@ function main() {
 
             this.draw = function() {
                 this.move();
-                c.fillRect(this.x, this.y, this.width, this.height);
+                c.beginPath();
+                c.rect(this.x, this.y, this.width, this.height);
+                c.stroke();
             };
         }
 
@@ -129,7 +131,7 @@ function main() {
                 this.move();
                 c.beginPath();
                 c.arc(this.x, this.y, this.r, 0, 2 * Math.PI, true);
-                c.fill();
+                c.stroke();
             };
         }
 
