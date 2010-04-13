@@ -1,8 +1,10 @@
+#!/usr/bin/env ruby
+
 require 'pathname'
 
 
 def realpath(path)
-  Pathname.new(path).realpath
+  Pathname.new(__FILE__).dirname.realpath.join(path)
 end
 
 
