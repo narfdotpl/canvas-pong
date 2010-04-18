@@ -2,7 +2,7 @@
 var pong; if (!pong) throw new Error('pong module has not been loaded');
 
 
-pong.Racket = function(c, kwargs) {
+pong.Racket = function (c, kwargs) {
     // x, y, width, height, yMin, yMax, up(), down()
     for (var k in kwargs) {
         this[k] = kwargs[k];
@@ -12,14 +12,25 @@ pong.Racket = function(c, kwargs) {
     this.halfHeight = this.height / 2;
     this.v = 0;
 
-    this.hitBall = function(ball) {
+    this.draw = function () {
+        c.beginPath();
+        c.rect(this.x, this.y, this.width, this.height);
+        c.stroke();
+    };
+
+    this.drawAndMove = function () {
+        this.draw();
+        this.move();
+    };
+
+    this.hitBall = function (ball) {
         // treat ball like square inscribed in circle of ball.r radius
 
         // compute center distances
-        var xDist = ball.x - (this.x + this.halfWidth);
-        var xDistAbs = Math.abs(xDist);
-        var yDist = ball.y - (this.y + this.halfHeight);
-        var yDistAbs = Math.abs(yDist);
+        var xDist = ball.x - (this.x + this.halfWidth),
+            xDistAbs = Math.abs(xDist),
+            yDist = ball.y - (this.y + this.halfHeight),
+            yDistAbs = Math.abs(yDist);
 
         // check for collisions
         if (xDistAbs <= this.halfWidth + ball.halfSide) {
@@ -43,7 +54,7 @@ pong.Racket = function(c, kwargs) {
         return false;
     };
 
-    this.move = function() {
+    this.move = function () {
         this.y += this.v;
 
         // keyboard
@@ -69,12 +80,5 @@ pong.Racket = function(c, kwargs) {
             this.y = this.yMax;
             this.v = 0;
         }
-    };
-
-    this.draw = function() {
-        this.move();
-        c.beginPath();
-        c.rect(this.x, this.y, this.width, this.height);
-        c.stroke();
     };
 };

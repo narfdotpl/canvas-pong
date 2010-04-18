@@ -2,12 +2,12 @@
 var pong; if (!pong) throw new Error('pong module has not been loaded');
 
 
-pong.play = function(canvas) {
+pong.play = function (canvas) {
     if (canvas.getContext) {
-        var c = canvas.getContext('2d');
-        var WIDTH = canvas.width;
-        var HEIGHT = canvas.height;
-        var FPS = 30;
+        var c = canvas.getContext('2d'),
+            WIDTH = canvas.width,
+            HEIGHT = canvas.height,
+            FPS = 30;
 
         // set border line parameters
         var borderThickness = 2;
@@ -15,14 +15,13 @@ pong.play = function(canvas) {
 
         // draw top and bottom border lines
         c.fillRect(0, 0, WIDTH, borderThickness);
-        c.fillRect(0, HEIGHT - borderThickness, WIDTH,
-                   borderThickness);
+        c.fillRect(0, HEIGHT - borderThickness, WIDTH, borderThickness);
 
         // set common racket parameters
-        var racketWidth = 20;
-        var racketHeight = 80;
-        var yMin = 2 * borderThickness;
-        var yMax = HEIGHT - yMin;
+        var racketWidth = 20,
+            racketHeight = 80,
+            yMin = 2 * borderThickness,
+            yMax = HEIGHT - yMin;
 
         // create left racket
         var rackets = []
@@ -102,20 +101,20 @@ pong.play = function(canvas) {
             rackets: rackets
         }));
 
-        // draw rackets
-        setInterval(function() {
-            // clear everything apart borders
+        // draw rackets and balls
+        setInterval(function () {
+            // clear everything apart from borders
             c.clearRect(0, borderThickness,
                         WIDTH, HEIGHT - 2 * borderThickness);
 
-            // draw rackets
+            // draw and move rackets
             for (var i = 0; i < rackets.length; i++) {
-                rackets[i].draw();
+                rackets[i].drawAndMove();
             }
 
-            // draw balls
+            // draw and move balls
             for (var i = 0; i < balls.length; i++) {
-                balls[i].draw();
+                balls[i].drawAndMove();
             }
         }, 1000 / FPS);
     }
