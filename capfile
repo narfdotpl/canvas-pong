@@ -1,24 +1,29 @@
 #!/usr/bin/env ruby
 
-require 'pathname'
+#---------
+#  paths
+#---------
 
+require 'pathname'
 
 def realpath(path)
   Pathname.new(__FILE__).dirname.realpath.join(path)
 end
 
-
 SOURCE_DIR = realpath('src')
 BUILD_DIR = realpath('build')
 
 
-desc 'build all'
+#--------------
+#  main tasks
+#--------------
+
+desc 'build production version'
 task :build do
   dir
   html
   js
 end
-
 
 desc 'build development version'
 task :dev do
@@ -28,24 +33,30 @@ task :dev do
 end
 
 
+#------------
+#  subtasks
+#------------
+
 desc 'prepare empty build directory'
 task :dir do
   system "[ ! -d #{BUILD_DIR} ] && mkdir #{BUILD_DIR}"
   system "rm -rf #{BUILD_DIR}/*"
 end
 
-
 desc 'render html'
 task :html do
   system "haml #{SOURCE_DIR}/haml/pong.haml > #{BUILD_DIR}/index.html"
 end
-
 
 desc 'render development html'
 task :html_dev do
   system "haml #{SOURCE_DIR}/haml/dev.haml > #{BUILD_DIR}/index.html"
 end
 
+desc 'copy jQuery'
+task :jQuery do
+  system "cp #{SOURCE_DIR}/jquery.min.js #{BUILD_DIR}"
+end
 
 desc 'compress js'
 task :js do
@@ -60,15 +71,8 @@ task :js do
          "--js_output_file=#{BUILD_DIR}/pong.js"
 end
 
-
 desc 'symlink js files to build dir'
 task :js_dev do
   jQuery
   system "ln -s #{SOURCE_DIR}/pong/*.js #{BUILD_DIR}"
-end
-
-
-desc 'copy jQuery'
-task :jQuery do
-  system "cp #{SOURCE_DIR}/jquery.min.js #{BUILD_DIR}"
 end
