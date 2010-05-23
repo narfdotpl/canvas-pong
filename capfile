@@ -66,12 +66,14 @@ task :js do
   jQuery
   system "java -jar #{THEIR_CODE_DIR}/compiler/compiler.jar " +
          "--compilation_level=SIMPLE_OPTIMIZATIONS " +
-         "--js=#{PONG_DIR}/init.js " +
-         "--js=#{PONG_DIR}/ball.js " +
-         "--js=#{PONG_DIR}/keys.js " +
-         "--js=#{PONG_DIR}/pause.js " +
-         "--js=#{PONG_DIR}/racket.js " +
-         "--js=#{PONG_DIR}/play.js " +
+         "--js=#{PONG_DIR}/0-init.js " +
+         "--js=#{PONG_DIR}/1-ball.js " +
+         "--js=#{PONG_DIR}/1-border.js " +
+         "--js=#{PONG_DIR}/1-controlsscreen.js " +
+         "--js=#{PONG_DIR}/1-keys.js " +
+         "--js=#{PONG_DIR}/1-racket.js " +
+         "--js=#{PONG_DIR}/2-pause.js " +
+         "--js=#{PONG_DIR}/3-play.js " +
          "--js_output_file=#{BUILD_DIR}/pong.js"
 end
 

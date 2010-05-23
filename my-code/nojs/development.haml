@@ -7,11 +7,13 @@
     %canvas(id='pong-canvas' width='800' height='400')
       Your browser is retarded.
     %script(src='jquery.min.js' type='text/javascript')
-    %script(src='init.js' type='text/javascript')
-    %script(src='ball.js' type='text/javascript')
-    %script(src='keys.js' type='text/javascript')
-    %script(src='pause.js' type='text/javascript')
-    %script(src='racket.js' type='text/javascript')
-    %script(src='play.js' type='text/javascript')
+    %script(src='0-init.js' type='text/javascript')
+    %script(src='1-ball.js' type='text/javascript')
+    %script(src='1-border.js' type='text/javascript')
+    %script(src='1-controlsscreen.js' type='text/javascript')
+    %script(src='1-keys.js' type='text/javascript')
+    %script(src='1-racket.js' type='text/javascript')
+    %script(src='2-pause.js' type='text/javascript')
+    %script(src='3-play.js' type='text/javascript')
     %script
       pong.play($('#pong-canvas')[0]);

@@ -18,11 +18,6 @@ pong.Racket = function (c, kwargs) {
         c.stroke();
     };
 
-    this.drawAndMove = function () {
-        this.draw();
-        this.move();
-    };
-
     this.hitBall = function (ball) {
         // treat ball like square inscribed in circle of ball.r radius
 

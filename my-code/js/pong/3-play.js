@@ -4,28 +4,33 @@ var pong; if (!pong) throw new Error('pong module has not been loaded');
 
 pong.play = function (canvas) {
     if (canvas.getContext) {
+        // setup basics
         var c = canvas.getContext('2d'),
             WIDTH = canvas.width,
             HEIGHT = canvas.height,
             FPS = 30;
 
-        // set border line parameters
+        // create controls screen
+        var controlsScreen = new pong.ControlsScreen(c, WIDTH, HEIGHT);
+
+
+        //---------------------------
+        //  create drawable objects
+        //---------------------------
+
+        var objects = [];
+
+        // set common border lines parameters
         var borderThickness = 2;
-        c.fillStyle = '#000';
 
-        // draw top and bottom border lines
-        c.fillRect(0, 0, WIDTH, borderThickness);
-        c.fillRect(0, HEIGHT - borderThickness, WIDTH, borderThickness);
-
-        // set common racket parameters
+        // set common rackets parameters
         var racketWidth = 20,
             racketHeight = 80,
             yMin = 2 * borderThickness,
             yMax = HEIGHT - yMin;
 
         // create left racket
-        var rackets = []
-        rackets.push(new pong.Racket(c, {
+        objects.push(new pong.Racket(c, {
             x: 2,
             y: (HEIGHT - racketHeight) / 2,
             width: racketWidth,
@@ -37,7 +42,7 @@ pong.play = function (canvas) {
         }));
 
         // create right racket
-        rackets.push(new pong.Racket(c, {
+        objects.push(new pong.Racket(c, {
             x: WIDTH - racketWidth - 2,
             y: (HEIGHT - racketHeight) / 2,
             width: racketWidth,
@@ -49,7 +54,7 @@ pong.play = function (canvas) {
         }));
 
         // create middle racket
-        rackets.push(new pong.Racket(c, {
+        objects.push(new pong.Racket(c, {
             x: WIDTH / 2,
             y: (HEIGHT - racketHeight) / 2,
             width: racketWidth,
@@ -60,9 +65,11 @@ pong.play = function (canvas) {
             down: pong.key(40)  // down arrow
         }));
 
+        // easily refer to rackets
+        var rackets = objects.slice();
+
         // create balls
-        var balls = [];
-        balls.push(new pong.Ball(c, {
+        objects.push(new pong.Ball(c, {
             x: WIDTH / 2,
             y: HEIGHT / 2,
             r: 15,
@@ -75,7 +82,7 @@ pong.play = function (canvas) {
             rackets: rackets
         }));
 
-        balls.push(new pong.Ball(c, {
+        objects.push(new pong.Ball(c, {
             x: WIDTH / 2,
             y: HEIGHT / 2,
             r: 10,
@@ -88,7 +95,7 @@ pong.play = function (canvas) {
             rackets: rackets
         }));
 
-        balls.push(new pong.Ball(c, {
+        objects.push(new pong.Ball(c, {
             x: WIDTH / 2,
             y: HEIGHT / 2,
             r: 5,
@@ -101,21 +108,65 @@ pong.play = function (canvas) {
             rackets: rackets
         }));
 
-        // draw rackets and balls
+        // create top border
+        objects.push(new pong.Border(c, {
+            x: 0,
+            y: 0,
+            width: WIDTH,
+            height: borderThickness
+        }));
+
+        // create bottom border
+        objects.push(new pong.Border(c, {
+            x: 0,
+            y: HEIGHT - borderThickness,
+            width: WIDTH,
+            height: borderThickness
+        }));
+
+
+        //--------------------------
+        //  create handy functions
+        //--------------------------
+
+        function clearCanvas() {
+            c.clearRect(0, 0, WIDTH, HEIGHT);
+        }
+
+        function drawObjects() {
+            for (var i = 0; i < objects.length; i++) {
+                objects[i].draw();
+            }
+        }
+
+        function moveObjects() {
+            for (var i = 0; i < objects.length; i++) {
+                objects[i].move();
+            }
+        }
+
+
+        //--------
+        //  play
+        //--------
+
+        // apply
+        moveObjects();
+
         setInterval(function () {
-            if (!pong.paused) {
-                // clear everything apart from borders
-                c.clearRect(0, borderThickness,
-                            WIDTH, HEIGHT - 2 * borderThickness);
-
-                // draw and move rackets
-                for (var i = 0; i < rackets.length; i++) {
-                    rackets[i].drawAndMove();
+            if (pong.paused) {
+                if (!controlsScreen.fadedIn) {
+                    clearCanvas();
+                    drawObjects();
+                    controlsScreen.fadeIn();
                 }
-
-                // draw and move balls
-                for (var i = 0; i < balls.length; i++) {
-                    balls[i].drawAndMove();
+            } else {
+                clearCanvas();
+                drawObjects();
+                if (!controlsScreen.fadedOut) {
+                    controlsScreen.fadeOut();
+                } else {
+                    moveObjects();
                 }
             }
         }, 1000 / FPS);

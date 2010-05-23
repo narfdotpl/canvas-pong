@@ -36,11 +36,6 @@ pong.Ball = function (c, kwargs) {
         c.restore();
     };
 
-    this.drawAndMove = function () {
-        this.draw();
-        this.move();
-    };
-
     this.move = function () {
         this.x += this.vx;
         this.y += this.vy;
