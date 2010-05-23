@@ -69,6 +69,7 @@ task :js do
          "--js=#{PONG_DIR}/init.js " +
          "--js=#{PONG_DIR}/ball.js " +
          "--js=#{PONG_DIR}/keys.js " +
+         "--js=#{PONG_DIR}/pause.js " +
          "--js=#{PONG_DIR}/racket.js " +
          "--js=#{PONG_DIR}/play.js " +
          "--js_output_file=#{BUILD_DIR}/pong.js"

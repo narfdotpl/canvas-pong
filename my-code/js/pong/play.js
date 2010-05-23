@@ -103,18 +103,20 @@ pong.play = function (canvas) {
 
         // draw rackets and balls
         setInterval(function () {
-            // clear everything apart from borders
-            c.clearRect(0, borderThickness,
-                        WIDTH, HEIGHT - 2 * borderThickness);
+            if (!pong.paused) {
+                // clear everything apart from borders
+                c.clearRect(0, borderThickness,
+                            WIDTH, HEIGHT - 2 * borderThickness);
 
-            // draw and move rackets
-            for (var i = 0; i < rackets.length; i++) {
-                rackets[i].drawAndMove();
-            }
+                // draw and move rackets
+                for (var i = 0; i < rackets.length; i++) {
+                    rackets[i].drawAndMove();
+                }
 
-            // draw and move balls
-            for (var i = 0; i < balls.length; i++) {
-                balls[i].drawAndMove();
+                // draw and move balls
+                for (var i = 0; i < balls.length; i++) {
+                    balls[i].drawAndMove();
+                }
             }
         }, 1000 / FPS);
     }
