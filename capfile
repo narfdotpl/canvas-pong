@@ -10,8 +10,11 @@ def realpath(path)
   Pathname.new(__FILE__).dirname.realpath.join(path)
 end
 
-SOURCE_DIR = realpath('src')
 BUILD_DIR = realpath('build')
+THEIR_CODE_DIR = realpath('their-code')
+MY_CODE_DIR = realpath('my-code')
+NOJS_DIR = MY_CODE_DIR.join('nojs')
+PONG_DIR = MY_CODE_DIR.join('js/pong')
 
 
 #--------------
@@ -45,34 +48,34 @@ end
 
 desc 'render html'
 task :html do
-  system "haml #{SOURCE_DIR}/haml/pong.haml > #{BUILD_DIR}/index.html"
+  system "haml #{NOJS_DIR}/production.haml > #{BUILD_DIR}/index.html"
 end
 
 desc 'render development html'
 task :html_dev do
-  system "haml #{SOURCE_DIR}/haml/dev.haml > #{BUILD_DIR}/index.html"
+  system "haml #{NOJS_DIR}/development.haml > #{BUILD_DIR}/index.html"
 end
 
 desc 'copy jQuery'
 task :jQuery do
-  system "cp #{SOURCE_DIR}/jquery.min.js #{BUILD_DIR}"
+  system "cp #{THEIR_CODE_DIR}/jquery/jquery.min.js #{BUILD_DIR}"
 end
 
 desc 'compress js'
 task :js do
   jQuery
-  system "java -jar #{SOURCE_DIR}/compiler/compiler.jar " +
+  system "java -jar #{THEIR_CODE_DIR}/compiler/compiler.jar " +
          "--compilation_level=SIMPLE_OPTIMIZATIONS " +
-         "--js=#{SOURCE_DIR}/pong/init.js " +
-         "--js=#{SOURCE_DIR}/pong/ball.js " +
-         "--js=#{SOURCE_DIR}/pong/keys.js " +
-         "--js=#{SOURCE_DIR}/pong/racket.js " +
-         "--js=#{SOURCE_DIR}/pong/play.js " +
+         "--js=#{PONG_DIR}/init.js " +
+         "--js=#{PONG_DIR}/ball.js " +
+         "--js=#{PONG_DIR}/keys.js " +
+         "--js=#{PONG_DIR}/racket.js " +
+         "--js=#{PONG_DIR}/play.js " +
          "--js_output_file=#{BUILD_DIR}/pong.js"
 end
 
 desc 'symlink js files to build dir'
 task :js_dev do
   jQuery
-  system "ln -s #{SOURCE_DIR}/pong/*.js #{BUILD_DIR}"
+  system "ln -s #{PONG_DIR}/*.js #{BUILD_DIR}"
 end
