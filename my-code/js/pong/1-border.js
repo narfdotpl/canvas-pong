@@ -14,6 +14,4 @@ pong.Border = function (c, kwargs) {
         c.fillRect(this.x, this.y, this.width, this.height);
         c.restore();
     };
-
-    this.move = function () {};
 };

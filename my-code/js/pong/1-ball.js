@@ -3,11 +3,14 @@ var pong; if (!pong) throw new Error('pong module has not been loaded');
 
 
 pong.Ball = function (c, kwargs) {
-    // x, y, r, vx, vy, yMin, yMax, maxSpeed, maxStretch, rackets
+    // x, y, r, vx, vy, xMin, xMax, yMin, yMax, maxSpeed, maxStretch, rackets,
+    // endGameCallback
     for (var k in kwargs) {
         this[k] = kwargs[k];
     }
 
+    this.xMin += this.r;
+    this.xMax -= this.r;
     this.yMin += this.r;
     this.yMax -= this.r;
     this.halfSide = this.r / Math.sqrt(2);  // for racket collision
@@ -36,7 +39,7 @@ pong.Ball = function (c, kwargs) {
         c.restore();
     };
 
-    this.move = function () {
+    this.move = function (omitCallback) {
         this.x += this.vx;
         this.y += this.vy;
 
@@ -53,6 +56,13 @@ pong.Ball = function (c, kwargs) {
                 if (this.rackets[i].hitBall(this)) {
                     break;
                 }
+            }
+        }
+
+        // end game
+        if (!omitCallback) {
+            if (this.x < this.xMin || this.x > this.xMax) {
+                this.endGameCallback();
             }
         }
     };
