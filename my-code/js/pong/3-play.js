@@ -143,7 +143,8 @@ pong.play = function (canvas) {
                 limits: {
                     x: {min: 0, max: WIDTH},
                     y: {min: yMin, max: yMax},
-                    v: {max: 20},
+                    vx: {max: 20},
+                    vy: {max: 10},
                     stretch: {max: 1.5}
                 }
             }));
@@ -159,7 +160,8 @@ pong.play = function (canvas) {
                 limits: {
                     x: {min: 0, max: WIDTH},
                     y: {min: yMin, max: yMax},
-                    v: {max: 20},
+                    vx: {max: 20},
+                    vy: {max: 10},
                     stretch: {max: 1.5}
                 }
             }));
@@ -175,7 +177,8 @@ pong.play = function (canvas) {
                 limits: {
                     x: {min: 0, max: WIDTH},
                     y: {min: yMin, max: yMax},
-                    v: {max: 20},
+                    vx: {max: 20},
+                    vy: {max: 10},
                     stretch: {max: 1.5}
                 }
             }));

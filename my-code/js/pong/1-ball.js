@@ -4,18 +4,19 @@ var pong; if (!pong) throw new Error('pong module has not been loaded');
 
 pong.Ball = function (c, kwargs) {
     // x, y, r, vx, vy, rackets, endGameCallback, limits (x min/max, y min/max,
-    // v max, stretch max)
+    // vx max, vy max, stretch max)
     for (var k in kwargs) {
         this[k] = kwargs[k];
     }
 
+    this.limits.v2 = {max: this.limits.vx.max * this.limits.vy.max};
     this.limits.x.min += this.r;
     this.limits.x.max -= this.r;
     this.limits.y.min += this.r;
     this.limits.y.max -= this.r;
     this.halfSide = this.r / Math.sqrt(2);  // for racket collision
 
-    this.applyPositionConstraints = function () {
+    this.applyPositionAndSpeedConstraints = function () {
         // bounce from borders
         if (this.y < this.limits.y.min) {
             this.y = this.limits.y.min;
@@ -31,13 +32,23 @@ pong.Ball = function (c, kwargs) {
                 }
             }
         }
+
+        // limit speed
+        if (Math.abs(this.vx) > this.limits.vx.max) {
+            var sign = this.vx > 0 ? 1 : -1;
+            this.vx = sign * this.limits.vx.max;
+        }
+        if (Math.abs(this.vy) > this.limits.vy.max) {
+            var sign = this.vy > 0 ? 1 : -1;
+            this.vy = sign * this.limits.vy.max;
+        }
     };
-    this.applyPositionConstraints();
+    this.applyPositionAndSpeedConstraints();
 
     this.draw = function () {
         // stretch circle
         var speedRatio = (this.vx * this.vx + this.vy * this.vy) /
-                         (this.limits.v.max * this.limits.v.max),
+                         this.limits.v2.max;
             scaleX = 1 + speedRatio * (this.limits.stretch.max - 1);
         if (scaleX > this.limits.stretch.max) {
             scaleX = this.limits.stretch.max;
@@ -62,7 +73,7 @@ pong.Ball = function (c, kwargs) {
         this.x += this.vx;
         this.y += this.vy;
 
-        this.applyPositionConstraints();
+        this.applyPositionAndSpeedConstraints();
 
         // end game
         if (!omitCallback) {
