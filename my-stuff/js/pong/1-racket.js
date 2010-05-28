@@ -3,7 +3,7 @@ var pong; if (!pong) throw new Error('pong module has not been loaded');
 
 
 pong.Racket = function (c, kwargs) {
-    // x, y, width, height, up(), down(), limits (y min/max)
+    // x, y, width, height, up(), down(), limits (v max, y min/max)
     for (var k in kwargs) {
         this[k] = kwargs[k];
     }
@@ -13,7 +13,7 @@ pong.Racket = function (c, kwargs) {
     this.halfHeight = this.height / 2;
     this.v = 0;
 
-    this.applyPositionConstraints = function () {
+    this.applyPositionAndSpeedConstraints = function () {
         // don't cross borders
         if (this.y < this.limits.y.min) {
             this.y = this.limits.y.min;
@@ -22,8 +22,14 @@ pong.Racket = function (c, kwargs) {
             this.y = this.limits.y.max;
             this.v = 0;
         }
+
+        // limit speed
+        if (Math.abs(this.v) > this.limits.v.max) {
+            var sign = this.v > 0 ? 1 : -1;
+            this.v = sign * this.limits.v.max;
+        }
     };
-    this.applyPositionConstraints();
+    this.applyPositionAndSpeedConstraints();
 
     this.draw = function () {
         c.beginPath();
@@ -80,6 +86,6 @@ pong.Racket = function (c, kwargs) {
             this.v = 0;
         }
 
-        this.applyPositionConstraints();
+        this.applyPositionAndSpeedConstraints();
     };
 };

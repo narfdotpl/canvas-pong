@@ -98,7 +98,10 @@ pong.play = function (canvas) {
                 height: racketHeight * 4.8,
                 up: pong.key(87),  // w
                 down: pong.key(83),  // s
-                limits: {y: {min: yMin, max: yMax}}
+                limits: {
+                    y: {min: yMin, max: yMax},
+                    v: {max: 20}
+                }
             }));
 
             // create right racket
@@ -109,7 +112,10 @@ pong.play = function (canvas) {
                 height: racketHeight,
                 up: pong.key(38),  // up arrow
                 down: pong.key(40),  // down arrow
-                limits: {y: {min: yMin, max: yMax}}
+                limits: {
+                    y: {min: yMin, max: yMax},
+                    v: {max: 20}
+                }
             }));
 
             // create middle racket
@@ -120,7 +126,10 @@ pong.play = function (canvas) {
                 height: racketHeight,
                 up: pong.key(38),  // up arrow
                 down: pong.key(40),  // down arrow
-                limits: {y: {min: yMin, max: yMax}}
+                limits: {
+                    y: {min: yMin, max: yMax},
+                    v: {max: 20}
+                }
             }));
         }
         createRackets();
