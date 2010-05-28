@@ -66,11 +66,11 @@ task :js do
   system "java -jar #{THEIR_DIR}/compiler/compiler.jar " +
          "--compilation_level=SIMPLE_OPTIMIZATIONS " +
          "--js=#{PONG_DIR}/0-init.js " +
-         "--js=#{PONG_DIR}/1-ball.js " +
          "--js=#{PONG_DIR}/1-border.js " +
          "--js=#{PONG_DIR}/1-controlsscreen.js " +
          "--js=#{PONG_DIR}/1-keys.js " +
          "--js=#{PONG_DIR}/1-racket.js " +
+         "--js=#{PONG_DIR}/1-shuttlecock.js " +
          "--js=#{PONG_DIR}/1-transition.js " +
          "--js=#{PONG_DIR}/2-pause.js " +
          "--js=#{PONG_DIR}/3-play.js " +

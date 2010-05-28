@@ -38,29 +38,30 @@ pong.Racket = function (c, kwargs) {
         c.stroke();
     };
 
-    this.hitBall = function (ball) {
-        // treat ball like square inscribed in circle of ball.r radius
+    this.hitShuttlecock = function (shuttlecock) {
+        // treat shuttlecock like square inscribed in circle of
+        // shuttlecock.r radius
 
         // compute center distances
-        var xDist = ball.x - (this.x + this.halfWidth),
+        var xDist = shuttlecock.x - (this.x + this.halfWidth),
             xDistAbs = Math.abs(xDist),
-            yDist = ball.y - (this.y + this.halfHeight),
+            yDist = shuttlecock.y - (this.y + this.halfHeight),
             yDistAbs = Math.abs(yDist);
 
         // check for collisions
-        if (xDistAbs <= this.halfWidth + ball.halfSide) {
-            if (yDistAbs <= this.halfHeight + ball.halfSide) {
+        if (xDistAbs <= this.halfWidth + shuttlecock.halfLength) {
+            if (yDistAbs <= this.halfHeight + shuttlecock.halfLength) {
                 if (yDistAbs < this.halfHeight) {
                     // bounce from left/right
                     var sign = xDist >= 0 ? 1 : -1;
-                    ball.vx = sign * Math.abs(ball.vx);
+                    shuttlecock.vx = sign * Math.abs(shuttlecock.vx);
                 } else {
                     // bounce from top/bottom
                     var sign = yDist >= 0 ? 1 : -1;
-                    ball.vy = sign * Math.abs(ball.vy);
+                    shuttlecock.vy = sign * Math.abs(shuttlecock.vy);
                 }
-                ball.vy += 0.1 * this.v;
-                ball.vx *= 1.02;
+                shuttlecock.vy += 0.1 * this.v;
+                shuttlecock.vx *= 1.02;
                 return true;
             }
         }

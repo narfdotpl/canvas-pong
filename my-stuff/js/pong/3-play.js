@@ -67,14 +67,14 @@ pong.play = function (canvas) {
             if (transition.done) {
                 transition.start();
                 createRackets();
-                createBalls();
+                createShuttlecocks();
             }
         }
 
 
-        //----------------------------
-        //  create rackets and balls
-        //----------------------------
+        //-----------------------------------
+        //  create rackets and shuttlecocks
+        //-----------------------------------
 
         // set common parameters
         var yMin = 2 * borderThickness,
@@ -138,34 +138,35 @@ pong.play = function (canvas) {
         }
         createRackets();
 
-        // create balls
-        function createBalls() {
-            delete objects.fromPreviousGame.balls;
-            objects.fromPreviousGame.balls = objects.fromCurrentGame.balls;
-            var balls = objects.fromCurrentGame.balls = [],
+        // create shuttlecocks
+        function createShuttlecocks() {
+            delete objects.fromPreviousGame.shuttlecocks;
+            objects.fromPreviousGame.shuttlecocks =
+                objects.fromCurrentGame.shuttlecocks;
+
+            var shuttlecocks = objects.fromCurrentGame.shuttlecocks = [],
                 rackets = objects.fromCurrentGame.rackets;
 
-            balls.push(new pong.Ball(c, {
+            shuttlecocks.push(new pong.Shuttlecock(c, {
                 x: WIDTH / 2,
                 y: HEIGHT / 2,
-                r: 15,
                 vx: 15,
-                vy: -1,
+                vy: -5,
+                length: 30,
                 rackets: rackets,
                 endGameCallback: endGame,
                 limits: {
                     x: {min: 0, max: WIDTH},
                     y: {min: yMin, max: yMax},
                     vx: {max: 20},
-                    vy: {max: 10},
-                    stretch: {max: 1.5}
+                    vy: {max: 10}
                 }
             }));
 
-            balls.push(new pong.Ball(c, {
+            shuttlecocks.push(new pong.Shuttlecock(c, {
                 x: WIDTH / 2,
                 y: HEIGHT / 2,
-                r: 10,
+                length: 20,
                 vx: 7,
                 vy: 3,
                 rackets: rackets,
@@ -174,15 +175,14 @@ pong.play = function (canvas) {
                     x: {min: 0, max: WIDTH},
                     y: {min: yMin, max: yMax},
                     vx: {max: 20},
-                    vy: {max: 10},
-                    stretch: {max: 1.5}
+                    vy: {max: 10}
                 }
             }));
 
-            balls.push(new pong.Ball(c, {
+            shuttlecocks.push(new pong.Shuttlecock(c, {
                 x: WIDTH / 2,
                 y: HEIGHT / 2,
-                r: 5,
+                length: 10,
                 vx: 5,
                 vy: -3,
                 rackets: rackets,
@@ -191,12 +191,11 @@ pong.play = function (canvas) {
                     x: {min: 0, max: WIDTH},
                     y: {min: yMin, max: yMax},
                     vx: {max: 20},
-                    vy: {max: 10},
-                    stretch: {max: 1.5}
+                    vy: {max: 10}
                 }
             }));
         }
-        createBalls();
+        createShuttlecocks();
 
 
         //--------------------------
@@ -225,12 +224,12 @@ pong.play = function (canvas) {
             // draw objects from previous game
             c.globalAlpha = transition.getPreviousGameAlpha();
             _drawAll(objects.fromPreviousGame.rackets);
-            _drawAll(objects.fromPreviousGame.balls);
+            _drawAll(objects.fromPreviousGame.shuttlecocks);
 
             // draw objects from current game
             c.globalAlpha = transition.getCurrentGameAlpha();
             _drawAll(objects.fromCurrentGame.rackets);
-            _drawAll(objects.fromCurrentGame.balls);
+            _drawAll(objects.fromCurrentGame.shuttlecocks);
 
             // restore context
             c.restore();
@@ -244,9 +243,9 @@ pong.play = function (canvas) {
             }
         }
 
-        function moveBalls() {
-            _moveAll(objects.fromPreviousGame.balls, true);
-            _moveAll(objects.fromCurrentGame.balls);
+        function moveShuttlecocks() {
+            _moveAll(objects.fromPreviousGame.shuttlecocks, true);
+            _moveAll(objects.fromCurrentGame.shuttlecocks);
         }
 
         function moveRackets() {
@@ -276,7 +275,7 @@ pong.play = function (canvas) {
                     if (!transition.done) {  // transition from previous game
                         transition.process();  // can't use "do" token :/
                     } else {
-                        moveBalls();
+                        moveShuttlecocks();
                     }
                 }
             }
