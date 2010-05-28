@@ -3,7 +3,8 @@ var pong; if (!pong) throw new Error('pong module has not been loaded');
 
 
 pong.Racket = function (c, kwargs) {
-    // x, y, width, height, up(), down(), limits (v max, y min/max)
+    // x, y, width, height, acceleration, up(), down(), limits (v max,
+    // y min/max)
     for (var k in kwargs) {
         this[k] = kwargs[k];
     }
@@ -76,12 +77,12 @@ pong.Racket = function (c, kwargs) {
             if (this.v > 0) {
                 this.v = 0;
             }
-            this.v -= 2;
+            this.v -= this.acceleration;
         } else if (this.down()) {
             if (this.v < 0) {
                 this.v = 0;
             }
-            this.v += 2;
+            this.v += this.acceleration;
         } else {
             this.v = 0;
         }

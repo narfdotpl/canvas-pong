@@ -88,7 +88,8 @@ pong.play = function (canvas) {
 
             // set common rackets parameters
             var racketWidth = 20,
-                racketHeight = 80;
+                racketHeight = 80,
+                acceleration = 10;
 
             // create left racket
             rackets.push(new pong.Racket(c, {
@@ -96,6 +97,7 @@ pong.play = function (canvas) {
                 y: (HEIGHT - racketHeight) / 2,
                 width: racketWidth,
                 height: racketHeight * 4.8,
+                acceleration: acceleration,
                 up: pong.key(87),  // w
                 down: pong.key(83),  // s
                 limits: {
@@ -110,6 +112,7 @@ pong.play = function (canvas) {
                 y: (HEIGHT - racketHeight) / 2,
                 width: racketWidth,
                 height: racketHeight,
+                acceleration: acceleration,
                 up: pong.key(38),  // up arrow
                 down: pong.key(40),  // down arrow
                 limits: {
@@ -124,6 +127,7 @@ pong.play = function (canvas) {
                 y: (HEIGHT - racketHeight) / 2,
                 width: racketWidth,
                 height: racketHeight,
+                acceleration: acceleration,
                 up: pong.key(38),  // up arrow
                 down: pong.key(40),  // down arrow
                 limits: {
