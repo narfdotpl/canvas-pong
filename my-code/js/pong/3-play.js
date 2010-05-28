@@ -4,13 +4,21 @@ var pong; if (!pong) throw new Error('pong module has not been loaded');
 
 pong.play = function (canvas) {
     if (canvas.getContext) {
-        // setup basics
+
+        //----------------
+        //  setup basics
+        //----------------
+
         var c = canvas.getContext('2d'),
             WIDTH = canvas.width,
             HEIGHT = canvas.height,
             FPS = 30;
 
-        // create controls screen
+
+        //--------------------------
+        //  create controls screen
+        //--------------------------
+
         var controlsScreen = new pong.ControlsScreen(c, WIDTH, HEIGHT);
 
 
@@ -88,10 +96,9 @@ pong.play = function (canvas) {
                 y: (HEIGHT - racketHeight) / 2,
                 width: racketWidth,
                 height: racketHeight * 4.8,
-                yMin: yMin,
-                yMax: yMax,
                 up: pong.key(87),  // w
-                down: pong.key(83)  // s
+                down: pong.key(83),  // s
+                limits: {y: {min: yMin, max: yMax}}
             }));
 
             // create right racket
@@ -100,10 +107,9 @@ pong.play = function (canvas) {
                 y: (HEIGHT - racketHeight) / 2,
                 width: racketWidth,
                 height: racketHeight,
-                yMin: yMin,
-                yMax: yMax,
                 up: pong.key(38),  // up arrow
-                down: pong.key(40)  // down arrow
+                down: pong.key(40),  // down arrow
+                limits: {y: {min: yMin, max: yMax}}
             }));
 
             // create middle racket
@@ -112,10 +118,9 @@ pong.play = function (canvas) {
                 y: (HEIGHT - racketHeight) / 2,
                 width: racketWidth,
                 height: racketHeight,
-                yMin: yMin,
-                yMax: yMax,
                 up: pong.key(38),  // up arrow
-                down: pong.key(40)  // down arrow
+                down: pong.key(40),  // down arrow
+                limits: {y: {min: yMin, max: yMax}}
             }));
         }
         createRackets();
@@ -133,14 +138,14 @@ pong.play = function (canvas) {
                 r: 15,
                 vx: 15,
                 vy: -1,
-                xMin: 0,
-                xMax: WIDTH,
-                yMin: yMin,
-                yMax: yMax,
-                maxSpeed: 20,
-                maxStretch: 1.5,
                 rackets: rackets,
-                endGameCallback: endGame
+                endGameCallback: endGame,
+                limits: {
+                    x: {min: 0, max: WIDTH},
+                    y: {min: yMin, max: yMax},
+                    v: {max: 20},
+                    stretch: {max: 1.5}
+                }
             }));
 
             balls.push(new pong.Ball(c, {
@@ -149,14 +154,14 @@ pong.play = function (canvas) {
                 r: 10,
                 vx: 7,
                 vy: 3,
-                xMin: 0,
-                xMax: WIDTH,
-                yMin: yMin,
-                yMax: yMax,
-                maxSpeed: 20,
-                maxStretch: 1.5,
                 rackets: rackets,
-                endGameCallback: endGame
+                endGameCallback: endGame,
+                limits: {
+                    x: {min: 0, max: WIDTH},
+                    y: {min: yMin, max: yMax},
+                    v: {max: 20},
+                    stretch: {max: 1.5}
+                }
             }));
 
             balls.push(new pong.Ball(c, {
@@ -165,14 +170,14 @@ pong.play = function (canvas) {
                 r: 5,
                 vx: 5,
                 vy: -3,
-                xMin: 0,
-                xMax: WIDTH,
-                yMin: yMin,
-                yMax: yMax,
-                maxSpeed: 20,
-                maxStretch: 1.5,
                 rackets: rackets,
-                endGameCallback: endGame
+                endGameCallback: endGame,
+                limits: {
+                    x: {min: 0, max: WIDTH},
+                    y: {min: yMin, max: yMax},
+                    v: {max: 20},
+                    stretch: {max: 1.5}
+                }
             }));
         }
         createBalls();
@@ -195,16 +200,23 @@ pong.play = function (canvas) {
         }
 
         function drawAllObjects() {
+            // draw borders
             _drawAll(borders);
 
+            // save context
             c.save();
+
+            // draw objects from previous game
             c.globalAlpha = transition.getPreviousGameAlpha();
             _drawAll(objects.fromPreviousGame.rackets);
             _drawAll(objects.fromPreviousGame.balls);
 
+            // draw objects from current game
             c.globalAlpha = transition.getCurrentGameAlpha();
             _drawAll(objects.fromCurrentGame.rackets);
             _drawAll(objects.fromCurrentGame.balls);
+
+            // restore context
             c.restore();
         }
 
@@ -230,9 +242,6 @@ pong.play = function (canvas) {
         //--------
         //  play
         //--------
-
-        // apply position constraints
-        moveRackets();
 
         setInterval(function () {
             if (pong.paused) {

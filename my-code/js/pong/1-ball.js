@@ -3,25 +3,44 @@ var pong; if (!pong) throw new Error('pong module has not been loaded');
 
 
 pong.Ball = function (c, kwargs) {
-    // x, y, r, vx, vy, xMin, xMax, yMin, yMax, maxSpeed, maxStretch, rackets,
-    // endGameCallback
+    // x, y, r, vx, vy, rackets, endGameCallback, limits (x min/max, y min/max,
+    // v max, stretch max)
     for (var k in kwargs) {
         this[k] = kwargs[k];
     }
 
-    this.xMin += this.r;
-    this.xMax -= this.r;
-    this.yMin += this.r;
-    this.yMax -= this.r;
+    this.limits.x.min += this.r;
+    this.limits.x.max -= this.r;
+    this.limits.y.min += this.r;
+    this.limits.y.max -= this.r;
     this.halfSide = this.r / Math.sqrt(2);  // for racket collision
+
+    this.applyPositionConstraints = function () {
+        // bounce from borders
+        if (this.y < this.limits.y.min) {
+            this.y = this.limits.y.min;
+            this.vy = Math.abs(this.vy);
+        } else if (this.y > this.limits.y.max) {
+            this.y = this.limits.y.max;
+            this.vy = - Math.abs(this.vy);
+        } else {
+            // bounce from rackets
+            for (var i = 0; i < this.rackets.length; i++) {
+                if (this.rackets[i].hitBall(this)) {
+                    break;
+                }
+            }
+        }
+    };
+    this.applyPositionConstraints();
 
     this.draw = function () {
         // stretch circle
         var speedRatio = (this.vx * this.vx + this.vy * this.vy) /
-                         (this.maxSpeed * this.maxSpeed),
-            scaleX = 1 + speedRatio * (this.maxStretch - 1);
-        if (scaleX > this.maxStretch) {
-            scaleX = this.maxStretch;
+                         (this.limits.v.max * this.limits.v.max),
+            scaleX = 1 + speedRatio * (this.limits.stretch.max - 1);
+        if (scaleX > this.limits.stretch.max) {
+            scaleX = this.limits.stretch.max;
         }
         var scaleY = 1 / scaleX;
 
@@ -43,25 +62,11 @@ pong.Ball = function (c, kwargs) {
         this.x += this.vx;
         this.y += this.vy;
 
-        // bounce from borders
-        if (this.y < this.yMin) {
-            this.y = this.yMin;
-            this.vy = Math.abs(this.vy);
-        } else if (this.y > this.yMax) {
-            this.y = this.yMax;
-            this.vy = - Math.abs(this.vy);
-        } else {
-            // bounce from rackets
-            for (var i = 0; i < this.rackets.length; i++) {
-                if (this.rackets[i].hitBall(this)) {
-                    break;
-                }
-            }
-        }
+        this.applyPositionConstraints();
 
         // end game
         if (!omitCallback) {
-            if (this.x < this.xMin || this.x > this.xMax) {
+            if (this.x < this.limits.x.min || this.x > this.limits.x.max) {
                 this.endGameCallback();
             }
         }
