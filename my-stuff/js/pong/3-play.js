@@ -87,7 +87,7 @@ pong.play = function (canvas) {
             var rackets = objects.fromCurrentGame.rackets = [];
 
             // set common rackets parameters
-            var racketWidth = 20,
+            var racketWidth = 4,
                 racketHeight = 80,
                 acceleration = 10;
 
