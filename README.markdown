@@ -2,6 +2,12 @@
 ===================
 
 
+Play online
+-----------
+
+Visit [http://narf.pl/canvas-pong/](http://narf.pl/canvas-pong/)
+
+
 Play offline
 ------------
 

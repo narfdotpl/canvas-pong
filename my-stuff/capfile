@@ -28,6 +28,12 @@ task :build do
   js
 end
 
+desc 'update megiteam and github'
+task :deploy do
+  megi
+  system "git push"
+end
+
 desc 'build development version'
 task :dev do
   dir
@@ -85,4 +91,12 @@ desc 'symlink js files to build dir'
 task :js_dev do
   system "cp #{THEIR_DIR}/jquery/jquery.min.js #{BUILD_DIR}"
   system "ln -s #{PONG_DIR}/*.js #{BUILD_DIR}"
+end
+
+desc 'build production version and scp it to megiteam'
+task :megi, :hosts => 'narf@narf.megiteam.pl' do
+  build
+  target = "narf.pl/main/on-the-stage/canvas-pong"
+  run "rm -rf #{target}"
+  upload "#{BUILD_DIR}/", target
 end
