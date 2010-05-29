@@ -55,14 +55,8 @@ task :html_dev do
   system "haml #{NOJS_DIR}/development.haml > #{BUILD_DIR}/index.html"
 end
 
-desc 'copy jQuery'
-task :jQuery do
-  system "cp #{THEIR_DIR}/jquery/jquery.min.js #{BUILD_DIR}"
-end
-
 desc 'compress js'
 task :js do
-  jQuery
   system "java -jar #{THEIR_DIR}/compiler/compiler.jar " +
          "--compilation_level=SIMPLE_OPTIMIZATIONS " +
          "--js=#{PONG_DIR}/0-init.js " +
@@ -79,6 +73,6 @@ end
 
 desc 'symlink js files to build dir'
 task :js_dev do
-  jQuery
+  system "cp #{THEIR_DIR}/jquery/jquery.min.js #{BUILD_DIR}"
   system "ln -s #{PONG_DIR}/*.js #{BUILD_DIR}"
 end
