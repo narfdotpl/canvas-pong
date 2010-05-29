@@ -39,35 +39,43 @@ pong.Racket = function (c, kwargs) {
     };
 
     this.hitShuttlecock = function (shuttlecock) {
-        // treat shuttlecock like square inscribed in circle of
-        // shuttlecock.r radius
+        // see my-stuff/docs/shuttlecock.jpg
 
-        // compute center distances
-        var xDist = shuttlecock.x - (this.x + this.halfWidth),
-            xDistAbs = Math.abs(xDist),
-            yDist = shuttlecock.y - (this.y + this.halfHeight),
-            yDistAbs = Math.abs(yDist);
+        var hit = false,
+            P = shuttlecock.cork.previousPosition.x,
+            C = shuttlecock.cork.currentPosition.x;
 
-        // check for collisions
-        if (xDistAbs <= this.halfWidth + shuttlecock.halfLength) {
-            if (yDistAbs <= this.halfHeight + shuttlecock.halfLength) {
-                if (yDistAbs < this.halfHeight) {
-                    // bounce from left/right
-                    var sign = xDist >= 0 ? 1 : -1;
-                    shuttlecock.vx = sign * Math.abs(shuttlecock.vx);
-                } else {
-                    // bounce from top/bottom
-                    var sign = yDist >= 0 ? 1 : -1;
-                    shuttlecock.vy = sign * Math.abs(shuttlecock.vy);
+        if (shuttlecock.cork.movingLeft) {
+            var R = this.x + this.width;
+            if (C <= R && R < P) {
+                var low = this.y,
+                    high = this.y + this.height,
+                    y = shuttlecock.cork.getYBetweenPositions(R);
+                if (low <= y && y <= high) {
+                    shuttlecock.vx = Math.abs(shuttlecock.vx);
+                    shuttlecock.angle.update();
+                    shuttlecock.moveTo(shuttlecock.x + R - C, shuttlecock.y);
                 }
-                shuttlecock.vy += 0.1 * this.v;
-                shuttlecock.vx *= 1.02;
-                return true;
+            }
+        } else {
+            var L = this.x;
+            if (P < L && L <= C) {
+                var low = this.y,
+                    high = this.y + this.height,
+                    y = shuttlecock.cork.getYBetweenPositions(L);
+                if (low <= y && y <= high) {
+                    shuttlecock.vx = -Math.abs(shuttlecock.vx);
+                    shuttlecock.angle.update();
+                    shuttlecock.moveTo(shuttlecock.x - C + L, shuttlecock.y);
+                }
             }
         }
 
-        // no collision
-        return false;
+        if (hit) {
+            shuttlecock.vy += 0.1 * this.v;
+            shuttlecock.vx *= 1.02;
+        }
+        return hit;
     };
 
     this.move = function () {

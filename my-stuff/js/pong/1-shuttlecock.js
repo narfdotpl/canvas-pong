@@ -21,17 +21,35 @@ pong.Angle = function (shuttlecock) {
 
 
 pong.Cork = function (shuttlecock) {
+    this.previousPosition = {};
     this.currentPosition = {};
 
-    this.moveTo = function (x, y) {
-        this.currentPosition.x = x;
-        this.currentPosition.y = y;
+    this.getYBetweenPositions = function (x) {
+        // y = a * x + b
+        var p = this.previousPosition,
+            c = this.currentPosition,
+            a = (c.y - p.y) / (c.x - p.x),
+            b = p.y - a * p.x;
+        return a * x + b;
+    };
+
+    this.saveCurrentPosition = function () {
+        var p = this.previousPosition,
+            c = this.currentPosition;
+        p.x = c.x;
+        p.y = c.y;
     };
 
     this.updateCurrentPosition = function () {
-        var s = shuttlecock;
-        this.moveTo(s.x - s.halfLength * s.angle.cos,
-                    s.y - s.halfLength * s.angle.sin);
+        var cp = this.currentPosition,
+            s = shuttlecock;
+
+        // moving left?
+        newX = s.x - s.halfLength * s.angle.cos;
+        this.movingLeft = cp.x - newX > 0;
+
+        cp.x = newX;
+        cp.y = s.y - s.halfLength * s.angle.sin;
     };
 };
 
@@ -109,6 +127,7 @@ pong.Shuttlecock = function (c, kwargs) {
     };
 
     this.move = function (omitCallback) {
+        this.cork.saveCurrentPosition();
         this.moveTo(this.x + this.vx, this.y + this.vy);
         this.applyPositionAndSpeedConstraints(omitCallback);
     };
