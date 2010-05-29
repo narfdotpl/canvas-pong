@@ -3,6 +3,7 @@ $height: 450px
 
 $foot-middle: 12px
 $foot-side: ($width - $foot-middle) / 2
+$music: 12px
 
 
 html, body
@@ -38,5 +39,12 @@ html, body
   text-align: center
 
 #foot-right
-  width: $foot-side
+  width: $foot-side - $music
   text-align: left
+
+#foot-music
+  width: $music
+  text-align: center
+  a
+    color: #000
+    text-decoration: none
