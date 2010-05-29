@@ -24,6 +24,7 @@ desc 'build production version'
 task :build do
   dir
   html
+  css
   js
 end
 
@@ -38,6 +39,15 @@ end
 #------------
 #  subtasks
 #------------
+
+desc 'render and compress css'
+task :css do
+  output = "#{BUILD_DIR}/style.css"
+  system "cp #{THEIR_DIR}/reset/reset.css #{output}"
+  system "sass #{NOJS_DIR}/production.sass >> #{output}"
+  system "java -jar #{THEIR_DIR}/yuicompressor/build/yuicompressor-2.4.2.jar "+
+         "-o #{output} #{output}"
+end
 
 desc 'prepare empty build directory'
 task :dir do
