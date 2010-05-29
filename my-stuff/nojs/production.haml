@@ -5,6 +5,16 @@
     %title &lt;canvas&gt; pong
     %link(rel='stylesheet' href='style.css' type='text/css')
   %body
+    :javascript
+      var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-8752416-2']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+        })();
+
     <a href="http://github.com/narfdotpl/canvas-pong"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" /></a>
 
     #content
