@@ -1,9 +1,17 @@
 $width: 800px
 $height: 450px
 
+$foot-middle: 12px
+$foot-side: ($width - $foot-middle) / 2
+
 
 html, body
   height: 100%
+  font:
+    family: 'Lucida Grande', Lucida, Arial, sans-serif
+    size: 12px
+  line-height: 1.3em
+
 
 #content
   width: $width
@@ -14,3 +22,21 @@ html, body
   margin:
     top: -$height / 2
     left: -$width / 2
+
+.row
+  overflow: hidden
+
+.col
+  float: left
+
+#foot-left
+  width: $foot-side
+  text-align: right
+
+#foot-middle
+  width: $foot-middle
+  text-align: center
+
+#foot-right
+  width: $foot-side
+  text-align: left
