@@ -4,7 +4,7 @@ var pong; if (!pong) throw new Error('pong module has not been loaded');
 
 pong.ControlsScreen = function (c, WIDTH, HEIGHT) {
     // set dimensions
-    this.width = WIDTH * 0.7;
+    this.width = WIDTH * 0.85;
     this.height = HEIGHT * 0.3;
     this.x = (WIDTH - this.width) / 2;
     this.y = (HEIGHT - this.height) / 2;
@@ -66,10 +66,11 @@ pong.ControlsScreen = function (c, WIDTH, HEIGHT) {
     var x = y = w = h = 0;
 
     // draw background
-    this.c.fillStyle = 'rgba(255, 255, 0, 0.8)';
+    this.c.fillStyle = 'rgba(255, 255, 255, 0.85)';
     this.c.fillRect(0, 0, this.width, this.height);
 
     // setup text style
+    this.c.font = '12px "Lucida Grande", Lucida, Arial, sans-serif';
     this.c.fillStyle = '#000';
     this.c.textBaseline = 'top'
 
@@ -93,7 +94,8 @@ pong.ControlsScreen = function (c, WIDTH, HEIGHT) {
     this.c.stroke();
 
     // write key name
-    this.c.fillText('space', x - 20, y + h);
+    var textY = y + h + 2;
+    this.c.fillText('space', x - 20, textY);
 
     // draw pause icon
     x += 5;
@@ -130,12 +132,12 @@ pong.ControlsScreen = function (c, WIDTH, HEIGHT) {
     drawArrows(this.c, x, y, w, h);
 
     // write key names
-    this.c.fillText('w/s', x + w * 0.8 - 5, y + h);
+    this.c.fillText('w/s', x + w * 0.8 - 8, textY);
 
     // draw right arrows
     x = this.width - 2.8 * w;
     drawArrows(this.c, x, y, w, h);
 
     // write key names
-    this.c.fillText('up/down arrow', x + w * 0.8 - 32, y + h);
+    this.c.fillText('up/down arrow', x + w * 0.8 - 44, textY);
 };
