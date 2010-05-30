@@ -74,7 +74,7 @@ pong.Racket = function (c, kwargs) {
         }
 
         if (hit) {
-            shuttlecock.vy += 0.1 * this.v;
+            shuttlecock.vy += 0.2 * this.v;
             shuttlecock.vx *= 1.02;
         }
         return hit;
