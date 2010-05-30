@@ -52,6 +52,7 @@ pong.Racket = function (c, kwargs) {
                     high = this.y + this.height,
                     y = shuttlecock.cork.getYBetweenPositions(R);
                 if (low <= y && y <= high) {
+                    hit = true;
                     shuttlecock.vx = Math.abs(shuttlecock.vx);
                     shuttlecock.angle.update();
                     shuttlecock.moveTo(shuttlecock.x + R - C, shuttlecock.y);
@@ -64,6 +65,7 @@ pong.Racket = function (c, kwargs) {
                     high = this.y + this.height,
                     y = shuttlecock.cork.getYBetweenPositions(L);
                 if (low <= y && y <= high) {
+                    hit = true;
                     shuttlecock.vx = -Math.abs(shuttlecock.vx);
                     shuttlecock.angle.update();
                     shuttlecock.moveTo(shuttlecock.x - C + L, shuttlecock.y);
