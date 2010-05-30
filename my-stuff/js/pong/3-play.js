@@ -27,7 +27,7 @@ pong.play = function (canvas) {
         //------------------
 
         // set common border lines parameters and create borders
-        var borderThickness = 2,
+        var borderThickness = 1,
             borders = [];
 
         // create top border
