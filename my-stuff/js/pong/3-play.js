@@ -96,7 +96,7 @@ pong.play = function (canvas) {
                 x: 2,
                 y: (HEIGHT - racketHeight) / 2,
                 width: racketWidth,
-                height: racketHeight * 4.8,
+                height: racketHeight,
                 acceleration: acceleration,
                 up: pong.key(87),  // w
                 down: pong.key(83),  // s
@@ -120,79 +120,38 @@ pong.play = function (canvas) {
                     v: {max: 20}
                 }
             }));
-
-            // create middle racket
-            rackets.push(new pong.Racket(c, {
-                x: WIDTH / 2,
-                y: (HEIGHT - racketHeight) / 2,
-                width: racketWidth,
-                height: racketHeight,
-                acceleration: acceleration,
-                up: pong.key(38),  // up arrow
-                down: pong.key(40),  // down arrow
-                limits: {
-                    y: {min: yMin, max: yMax},
-                    v: {max: 20}
-                }
-            }));
         }
         createRackets();
 
         // create shuttlecocks
         function createShuttlecocks() {
+            function fractionWithRandomSign(x, min, max) {
+                var sign = Math.random() < 0.5 ? -1 : 1;
+                return sign * x * (min + (max - min) * Math.random());
+            }
+
             delete objects.fromPreviousGame.shuttlecocks;
             objects.fromPreviousGame.shuttlecocks =
                 objects.fromCurrentGame.shuttlecocks;
 
             var shuttlecocks = objects.fromCurrentGame.shuttlecocks = [],
-                rackets = objects.fromCurrentGame.rackets;
+                rackets = objects.fromCurrentGame.rackets,
+                limits = {
+                    x: {min: 0, max: WIDTH},
+                    y: {min: yMin, max: yMax},
+                    vx: {max: 20},
+                    vy: {max: 10}
+                };
 
             shuttlecocks.push(new pong.Shuttlecock(c, {
                 x: WIDTH / 2,
                 y: HEIGHT / 2,
-                vx: -15,
-                vy: -5,
+                vx: fractionWithRandomSign(limits.vx.max, 0.55, 0.8),
+                vy: fractionWithRandomSign(limits.vy.max, 0.2, 0.6),
                 length: 30,
                 rackets: rackets,
                 endGameCallback: endGame,
-                limits: {
-                    x: {min: 0, max: WIDTH},
-                    y: {min: yMin, max: yMax},
-                    vx: {max: 20},
-                    vy: {max: 10}
-                }
-            }));
-
-            shuttlecocks.push(new pong.Shuttlecock(c, {
-                x: WIDTH / 2,
-                y: HEIGHT / 2,
-                length: 20,
-                vx: -7,
-                vy: 3,
-                rackets: rackets,
-                endGameCallback: endGame,
-                limits: {
-                    x: {min: 0, max: WIDTH},
-                    y: {min: yMin, max: yMax},
-                    vx: {max: 20},
-                    vy: {max: 10}
-                }
-            }));
-
-            shuttlecocks.push(new pong.Shuttlecock(c, {
-                x: WIDTH / 2,
-                y: HEIGHT / 2,
-                length: 10,
-                vx: -5,
-                vy: -3,
-                rackets: rackets,
-                endGameCallback: endGame,
-                limits: {
-                    x: {min: 0, max: WIDTH},
-                    y: {min: yMin, max: yMax},
-                    vx: {max: 20},
-                    vy: {max: 10}
-                }
+                limits: limits
             }));
         }
         createShuttlecocks();
