@@ -31,11 +31,17 @@
           original game by
           %a(href='http://en.wikipedia.org/wiki/Allan_Alcorn') Allan Alcorn
         .col#foot-music
-          %a(href='http://www.endlessyoutube.com/watch?v=AA9maAERDAs' target='_newtab' title='play music') ♫
+          %a(href='http://www.endlessyoutube.com/watch?v=AA9maAERDAs' target='_newtab' class='off' title='play music') ♫
 
     %script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js' type='text/javascript')
     %script(src='pong.js' type='text/javascript')
     :javascript
       $(function () {
+        // play game
         pong.play($('#pong-canvas')[0]);
+
+        // remove "off" class after turning music on
+        $('#foot-music a').one('click', function () {
+          $(this).removeClass('off');
+        });
       });

@@ -1,6 +1,8 @@
 $width: 800px
 $height: 450px
 
+$music-color: #000
+
 $foot-middle: 12px
 $foot-side: ($width - $foot-middle) / 2
 $music: 12px
@@ -46,5 +48,10 @@ html, body
   width: $music
   text-align: center
   a
-    color: #000
+    color: $music-color
     text-decoration: none
+
+    &.off
+      color: #aaa
+      &:hover
+        color: $music-color
