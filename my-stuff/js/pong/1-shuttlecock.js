@@ -40,16 +40,21 @@ pong.Cork = function (shuttlecock) {
         p.y = c.y;
     };
 
-    this.updateCurrentPosition = function () {
+    this.updateCurrentPosition = function (omitXUpdate) {
         var cp = this.currentPosition,
             s = shuttlecock;
 
-        // moving left?
-        var newX = s.x - s.halfLength * s.angle.cos;
-        this.movingLeft = cp.x - newX > 0;
-
-        cp.x = newX;
+        // update y
         cp.y = s.y - s.halfLength * s.angle.sin;
+
+        // update x
+        if (!omitXUpdate) {
+            // moving left?
+            var newX = s.x - s.halfLength * s.angle.cos;
+            this.movingLeft = cp.x - newX > 0;
+
+            cp.x = newX;
+        }
     };
 };
 
@@ -74,18 +79,18 @@ pong.Shuttlecock = function (c, kwargs) {
             this.vy = Math.abs(this.vy);
             this.angle.update();
             this.moveTo(this.x, 2 * this.limits.y.min - ccp.y +
-                                this.halfLength * this.angle.sin);
+                                this.halfLength * this.angle.sin, true);
         } else if (ccp.y > this.limits.y.max) {
             this.vy = -Math.abs(this.vy);
             this.angle.update();
             this.moveTo(this.x, 2 * this.limits.y.max - ccp.y +
-                                this.halfLength * this.angle.sin);
-        } else {
-            // bounce from rackets
-            for (var i = 0; i < this.rackets.length; i++) {
-                if (this.rackets[i].hitShuttlecock(this)) {
-                    break;
-                }
+                                this.halfLength * this.angle.sin, true);
+        }
+
+        // bounce from rackets
+        for (var i = 0; i < this.rackets.length; i++) {
+            if (this.rackets[i].hitShuttlecock(this)) {
+                break;
             }
         }
 
@@ -131,12 +136,12 @@ pong.Shuttlecock = function (c, kwargs) {
         this.applyPositionAndSpeedConstraints();
     };
 
-    this.moveTo = function (x, y) {
+    this.moveTo = function (x, y, omitCorkXUpdate) {
         // update center position
         this.x = x;
         this.y = y;
 
         // update cork position
-        this.cork.updateCurrentPosition();
+        this.cork.updateCurrentPosition(omitCorkXUpdate);
     };
 };
