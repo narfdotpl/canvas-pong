@@ -45,7 +45,7 @@ pong.Cork = function (shuttlecock) {
             s = shuttlecock;
 
         // moving left?
-        newX = s.x - s.halfLength * s.angle.cos;
+        var newX = s.x - s.halfLength * s.angle.cos;
         this.movingLeft = cp.x - newX > 0;
 
         cp.x = newX;
@@ -67,7 +67,7 @@ pong.Shuttlecock = function (c, kwargs) {
     this.halfWidth = this.halfLength * 0.7;
     this.limits.v2 = {max: this.limits.vx.max * this.limits.vy.max};
 
-    this.applyPositionAndSpeedConstraints = function (omitCallback) {
+    this.applyPositionAndSpeedConstraints = function () {
         // bounce from borders
         var ccp = this.cork.currentPosition;
         if (ccp.y < this.limits.y.min) {
@@ -90,12 +90,13 @@ pong.Shuttlecock = function (c, kwargs) {
         }
 
         // limit speed
+        var sign;
         if (Math.abs(this.vx) > this.limits.vx.max) {
-            var sign = this.vx > 0 ? 1 : -1;
+            sign = this.vx > 0 ? 1 : -1;
             this.vx = sign * this.limits.vx.max;
         }
         if (Math.abs(this.vy) > this.limits.vy.max) {
-            var sign = this.vy > 0 ? 1 : -1;
+            sign = this.vy > 0 ? 1 : -1;
             this.vy = sign * this.limits.vy.max;
         }
 
@@ -103,11 +104,9 @@ pong.Shuttlecock = function (c, kwargs) {
         this.angle.update();
 
         // end game
-        if (!omitCallback) {
-            var x = this.cork.currentPosition.x;
-            if (x < this.limits.x.min || x > this.limits.x.max) {
-                this.endGameCallback();
-            }
+        var x = this.cork.currentPosition.x;
+        if (x < this.limits.x.min || x > this.limits.x.max) {
+            this.endGameCallback();
         }
     };
     this.applyPositionAndSpeedConstraints();
@@ -126,10 +125,10 @@ pong.Shuttlecock = function (c, kwargs) {
         c.restore();
     };
 
-    this.move = function (omitCallback) {
+    this.move = function () {
         this.cork.saveCurrentPosition();
         this.moveTo(this.x + this.vx, this.y + this.vy);
-        this.applyPositionAndSpeedConstraints(omitCallback);
+        this.applyPositionAndSpeedConstraints();
     };
 
     this.moveTo = function (x, y) {

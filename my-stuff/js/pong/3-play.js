@@ -203,7 +203,6 @@ pong.play = function (canvas) {
         }
 
         function moveShuttlecocks() {
-            _moveAll(objects.fromPreviousGame.shuttlecocks, true);
             _moveAll(objects.fromCurrentGame.shuttlecocks);
         }
 

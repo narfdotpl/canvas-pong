@@ -7,11 +7,11 @@ pong.Transition = function () {
     this.progress = 1;  // 0..1
 
     this.getCurrentGameAlpha = function () {
-        return this.progress
+        return this.progress;
     };
 
     this.getPreviousGameAlpha = function () {
-        return 1 - this.progress
+        return 1 - this.progress;
     };
 
     this.process = function () {

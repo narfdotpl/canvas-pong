@@ -27,7 +27,7 @@ pong.ControlsScreen = function (c, WIDTH, HEIGHT) {
         c.globalAlpha = this.alpha;
         c.drawImage(this.canvas, this.x, this.y);
         c.restore();
-    }
+    };
 
     // fade in
     this.fadeIn = function () {
@@ -63,7 +63,7 @@ pong.ControlsScreen = function (c, WIDTH, HEIGHT) {
     //-------------------------------
 
     // create handy variables
-    var x = y = w = h = 0;
+    var x, y, w, h;
 
     // draw background
     this.c.fillStyle = 'rgba(255, 255, 255, 0.85)';
@@ -72,7 +72,7 @@ pong.ControlsScreen = function (c, WIDTH, HEIGHT) {
     // setup text style
     this.c.font = '12px "Lucida Grande", Lucida, Arial, sans-serif';
     this.c.fillStyle = '#000';
-    this.c.textBaseline = 'top'
+    this.c.textBaseline = 'top';
 
     // draw play icon
     w = 30;
