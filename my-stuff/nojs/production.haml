@@ -31,7 +31,7 @@
           original game by
           %a(href='http://en.wikipedia.org/wiki/Allan_Alcorn') Allan Alcorn
         .col#foot-music
-          %a(href='http://www.youtube.com/v/AA9maAERDAs?autoplay=1&loop=1' target='_newtab' class='off' title='play music') ♫
+          %a(href='#' target='_newtab' class='music off' title='play music') ♫
 
     %script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js' type='text/javascript')
     %script(src='pong.js' type='text/javascript')
@@ -40,8 +40,21 @@
         // play game
         pong.play($('#pong-canvas')[0]);
 
+        // pick random song
+        var $musicLink = $('#foot-music a');
+        function pickRandomSong()  {
+          var songs = ['AA9maAERDAs', '0J2QdDbelmY', 'Lq9m2QT0R6M'],
+              song = songs[Math.floor(Math.random() * songs.length)];
+          $musicLink.attr('href', 'http://www.youtube.com/v/' + song +
+                                  '?autoplay=1&loop=1');
+        }
+        pickRandomSong();
+
         // remove "off" class after turning music on
-        $('#foot-music a').one('click', function () {
-          $(this).removeClass('off');
+        $musicLink.one('click', function () {
+          $musicLink.removeClass('off');
+        }).click(function () {
+          // pick next random song in just a moment
+          setTimeout(pickRandomSong, 100);
         });
       });
