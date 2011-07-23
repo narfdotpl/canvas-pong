@@ -15,7 +15,7 @@ pong.Transition = function () {
     };
 
     this.process = function () {
-        this.progress += 1 / 30;
+        this.progress += 1 / 60;
         if (this.progress >= 1) {
             this.progress = 1;
             this.done = true;

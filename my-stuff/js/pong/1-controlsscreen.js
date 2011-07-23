@@ -34,7 +34,7 @@ pong.ControlsScreen = function (c, WIDTH, HEIGHT) {
         this.fadedIn = false;
         this.fadedOut = false;
 
-        this.alpha += 0.2;
+        this.alpha += 0.1;
         if (this.alpha >= 1) {
             this.alpha = 1;
             this.fadedIn = true;
@@ -48,7 +48,7 @@ pong.ControlsScreen = function (c, WIDTH, HEIGHT) {
         this.fadedIn = false;
         this.fadedOut = false;
 
-        this.alpha -= 0.15;
+        this.alpha -= 0.075;
         if (this.alpha <= 0) {
             this.alpha = 0;
             this.fadedOut = true;

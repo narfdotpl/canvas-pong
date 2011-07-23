@@ -132,7 +132,7 @@ pong.Shuttlecock = function (c, kwargs) {
 
     this.move = function () {
         this.cork.saveCurrentPosition();
-        this.moveTo(this.x + this.vx, this.y + this.vy);
+        this.moveTo(this.x + 0.5 * this.vx, this.y + 0.5 * this.vy);
         this.applyPositionAndSpeedConstraints();
     };
 

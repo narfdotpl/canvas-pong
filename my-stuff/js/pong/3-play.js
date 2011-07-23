@@ -11,8 +11,7 @@ pong.play = function (canvas) {
 
         var c = canvas.getContext('2d'),
             WIDTH = canvas.width,
-            HEIGHT = canvas.height,
-            FPS = 30;
+            HEIGHT = canvas.height;
 
 
         //--------------------------
@@ -216,7 +215,7 @@ pong.play = function (canvas) {
         //  play
         //--------
 
-        setInterval(function () {
+        (function play(timestamp) {
             if (pong.paused) {
                 if (!controlsScreen.fadedIn) {
                     clearCanvas();
@@ -237,6 +236,8 @@ pong.play = function (canvas) {
                     }
                 }
             }
-        }, 1000 / FPS);
+
+            requestAnimationFrame(play);
+        })();
     }
 };

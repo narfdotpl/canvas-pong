@@ -84,7 +84,7 @@ pong.Racket = function (c, kwargs) {
     };
 
     this.move = function () {
-        this.y += this.v;
+        this.y += 0.5 * this.v;
 
         // react to keyboard input
         if (this.up()) {
