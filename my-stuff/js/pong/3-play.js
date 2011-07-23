@@ -88,7 +88,7 @@ pong.play = function (canvas) {
             // set common rackets parameters
             var racketWidth = 4,
                 racketHeight = 80,
-                acceleration = 10;
+                acceleration = 14;
 
             // create left racket
             rackets.push(new pong.Racket(c, {
